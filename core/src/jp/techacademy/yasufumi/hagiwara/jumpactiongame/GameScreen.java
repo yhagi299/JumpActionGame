@@ -161,7 +161,7 @@ public class GameScreen extends ScreenAdapter{
     private void createStage(){
         Texture stepTexture = new Texture("step.png");
         Texture starTexture = new Texture("star.png");
-        Texture enemyTexture = new Texture("uma.png");
+        Texture enemyTexture = new Texture("enemy.png");
         Texture playerTexture = new Texture("uma.png");
         Texture ufoTexture = new Texture("ufo.png");
 
@@ -288,9 +288,21 @@ public class GameScreen extends ScreenAdapter{
             }
         }
 
+        for (int i = 0; i < mEnemys.size(); i++){
+            Enemy enemy = mEnemys.get(i);
+
+            if(mPlayer.getBoundingRectangle().overlaps(enemy.getBoundingRectangle())){
+                mFail_tone.play();
+                mGameState = GAME_STATE_GAMEOVER;
+                return;
+            }
+        }
+
+
         if(mPlayer.velocity.y > 0){
             return;
         }
+
 
         for (int i = 0; i < mSteps.size(); i++){
             Step step = mSteps.get(i);
@@ -310,18 +322,6 @@ public class GameScreen extends ScreenAdapter{
             }
         }
 
-        for (int i = 0; i < mEnemys.size(); i++){
-            Enemy enemy = mEnemys.get(i);
-
-            if(mPlayer.getY() > enemy.getY()){
-                if(mPlayer.getBoundingRectangle().overlaps(enemy.getBoundingRectangle())){
-                    mPlayer.hitStep();
-                    mFail_tone.play();
-                    mGameState = GAME_STATE_GAMEOVER;
-                    return;
-                }
-            }
-        }
     }
 
     private void checkGameOver() {
